@@ -42,7 +42,7 @@ let mitox = 300;//ミトの位置
 let mitoy = 300;
 let kaedex = 0;//カエデの位置
 let kaedey = 0;
-let fire = [[325, 288], [325, 288]]
+let fire = [[325, 288], [325, 288], [325, 288], [325, 288]]
 let nowmove = 0;//今回のクリックにどれだけ移動しているか
 //画面の描写
 function step() {
@@ -78,7 +78,7 @@ function step() {
 step();
 
 let mitospeed = 1.7;
-let kaedespeed = 2;
+let kaedespeed = 1.7;
 function mito() {
   if (keyw) {
     mitoy = mitoy - mitospeed;
@@ -126,7 +126,7 @@ function kaede() {/*マウスの方向に進む
   //クリックした点に進む（画面を動かす）
   if (nowmove != Math.abs(mousepoint.x - 300) && Math.abs(300 - mousepoint.y) < Math.abs(300 - mousepoint.x)) {
     var ratio = (300 - mousepoint.y) / (300 - mousepoint.x);
-    kaedex = (Math.abs(mousepoint.x - 300) / (mousepoint.x - 300)) + kaedex;
+    kaedex = (Math.abs(mousepoint.x - 300) / (mousepoint.x - 300)) * kaedespeed + kaedex;
     if (300 - mousepoint.x >= 0) {
       kaedey = kaedey - ratio;
     } else {
@@ -135,7 +135,7 @@ function kaede() {/*マウスの方向に進む
     nowmove++;
   } else if (nowmove != Math.abs(mousepoint.y - 300) && Math.abs(300 - mousepoint.y) >= Math.abs(300 - mousepoint.x)) {
     var ratio = (300 - mousepoint.x) / (300 - mousepoint.y);
-    kaedey = (Math.abs(mousepoint.y - 300) / (mousepoint.y - 300)) + kaedey;
+    kaedey = (Math.abs(mousepoint.y - 300) / (mousepoint.y - 300)) * kaedespeed + kaedey;
     if (300 - mousepoint.y >= 0) {
       kaedex = kaedex - ratio;
     } else {
@@ -146,20 +146,21 @@ function kaede() {/*マウスの方向に進む
 }
 
 let firestarter = 0;
-let firestart_kaede = {
-  x: 0,
-  y: 0
-}
+let firestart_kaede = {};
+firestart_kaede['x'] =  [0, 0, 0, 0];
+firestart_kaede['y'] =  [0, 0, 0, 0];
 function firego() {//炎を撃つ
-  fire[0][0] = fire[0][0] + firestart_kaede.x - kaedex + 1;
-  firestart_kaede.x = kaedex;
-  fire[0][1] = fire[0][1] + firestart_kaede.y - kaedey;
-  firestart_kaede.y = kaedey;
-  if (fire[0][0] >= 600) {
-    fire[0][0] = 325;
-    fire[0][1] = 288;
-    clearInterval(firestarter);
-    fireok = true;
+  for (let i = 0; i < fire.length; i++) {
+    if (fire[i][0] > 325) {
+      fire[i][0] = fire[i][0] + firestart_kaede.x[i] - kaedex + 3;
+      firestart_kaede.x[i] = kaedex;
+      fire[i][1] = fire[i][1] + firestart_kaede.y[i] - kaedey;
+      firestart_kaede.y[i] = kaedey;
+      if (fire[i][0] >= 600) {
+        fire[i][0] = 325;
+        fire[i][1] = 288;
+      }
+    }
   }
 }
 function firestart() {
@@ -168,13 +169,13 @@ function firestart() {
   }
   firemove();
 }
+firestart();
 
 let keyw = false;
 let keya = false;
 let keys = false;
 let keyd = false;
 let mmoveing = 0;
-let fireok = true;
 function mitomove() {
   function mitomoveing() {
     mmoveing = setInterval(mito, 1000 / 60);
@@ -194,13 +195,16 @@ document.addEventListener('keydown', (event) => {
   } else if (keyName == 'd' || keyName == 'D') {
     keyd = true;
   } else if (keyName == 'Shift') {
-    if (fireok){
-      firestart_kaede.x = kaedex;
-      firestart_kaede.y = kaedey;
-      fireok = false;
-      firestart();
+    for (let i = 0; i < fire.length; i++) {
+      if (fire[i][0] == 325) {
+        firestart_kaede.x[i] = kaedex;
+        firestart_kaede.y[i] = kaedey;
+        fire[i][0] = 326;
+        i = fire.length;
+      }
     }
-  } else { }
+    console.log(firestart_kaede);
+  }
 });
 document.addEventListener('keyup', (event) => {
   var keyName = event.key;
