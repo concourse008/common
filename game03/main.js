@@ -16,6 +16,7 @@ console.log(flag);
 let itemflag = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 let itemname = ['真空パックの茶葉', 'ティーポット', '薪', 'アルミケトル', 'カギ', 'きれいな氷', '茶こし器', '四葉のクローバー', 'お揃いマグカップ', 'おもちゃの集音機', 'うんちマシーン？', '充電'];
 let getitem = [];
+let edflag = false;
 
 let mitokae = {
   x: 160,
@@ -433,7 +434,11 @@ function tweet() {
   if (place == 0) {
     coment = '道路で一休み。' + '\n' + '「ここの角っこの砂がさらさらやねん」「泥団子作りたくなりますねぇ……」';
   } else if (place == 1) {
+    if (edflag){
+      coment = '次の冒険の相談をしている。' + '\n' + '「実は紅茶も種類が色々あるんですよ」「ほんまに！？コンプせな！」';
+    } else {
     coment = 'OZON入り口で空を見ている。' + '\n' + '「あの雲、うんちに見えへん？」「どちらかと言えばカレーに見えません？」';
+    }
   } else if (place == 2) {
     coment = 'シゲルチャペックの前でしりとり中。' + '\n' + '「うんち」「蝶」「うんち」「畜生」「うんち」「地球」';
   } else if (place == 3) {
@@ -549,6 +554,7 @@ const look11 = new Branch(2, 'どこを調べよう？', lo1010, 0, 0, 'その�
 const look10 = new Branch(2, 'どこを調べよう？', lo0000, 0, 0, 'そのへん', '', '');
 const look1set = function () {
   if (itemflag[1] == 1 && itemflag[2] == 1 && itemflag[3] == 1 && itemflag[4] == 1 && itemflag[5] == 1 && itemflag[6] == 1 && itemflag[7] == 1 && itemflag[8] == 1 && itemflag[9] == 1 && itemflag[10] == 1 && itemflag[11] == 1) {
+    edflag = true;
     return look12;
   } else if (itemflag[0] == 1) {
     return look11;
