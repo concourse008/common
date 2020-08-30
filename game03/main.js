@@ -878,7 +878,7 @@ const lo6030l = new Text(1, 'ほんまに空っぽや……');
 
 const lo60315m = new Text(1, 'そうなんや……');
 const lo60314m = new Text(0, 'それは…… あんまり気に\nしなくていいやつです', lo60315m);
-const lo60313m = new Text(1, 'なんでで金庫の中に\nそれ一個入ってるん？', lo60314m);
+const lo60313m = new Text(1, 'なんで金庫の中に\nそれ一個入ってるん？', lo60314m);
 const lo60312m = new Text(0, '……みたいですね', lo60313m);
 const lo60311m = new Text(1, '……これだけ？', lo60312m);
 const lo60310m = new Text(0, 'やった！ 美味しい紅茶に\n一歩近づきましたよ！', lo60311m);
