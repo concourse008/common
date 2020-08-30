@@ -544,7 +544,7 @@ const lo1012 = new Text(0, '材料が揃ったら\nここでお茶を飲みま�
 const lo1011 = new Text(1, 'ぽかぽかするわー', lo1012);
 const lo1010 = new Text(0, 'このあたり、日向で良い感じですねぇ', lo1011);
 
-const look12 = new Branch(2, 'どこを調べよう？', lo1010n, 0, 0, 'そのへん', '', '');
+const look12 = new Branch(2, 'どこを調べよう？', lo1020, 0, 0, 'そのへん', '', '');
 const look11 = new Branch(2, 'どこを調べよう？', lo1010, 0, 0, 'そのへん', '', '');
 const look10 = new Branch(2, 'どこを調べよう？', lo0000, 0, 0, 'そのへん', '', '');
 const look1set = function () {
@@ -556,7 +556,7 @@ const look1set = function () {
     return look10;
   }
 };
-const look2 = new Check(2, 'どこを調べよう？', look2set);
+const look1 = new Check(2, 'どこを調べよう？', look1set);
 
 //紅茶店
 const menu2 = new Menu(0, 'ほとんどチリになってますねぇ……');
