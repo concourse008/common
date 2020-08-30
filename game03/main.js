@@ -441,9 +441,9 @@ function tweet() {
   } else if (place == 4) {
     coment = '好々山小屋の店中でキャンプ気分。' + '\n' + '「マシュマロ焼きたいですねぇ」「焚火おちつくわぁ」';
   } else if (place == 5) {
-    coment = 'エイブルトゥーで100均を満喫。' + '\n' + '「」';
+    coment = 'エイブルトゥーで100均を満喫。' + '\n' + '「あ！いま何かおった！」「あれはたぬきですねぇ…」';
   } else if (place == 6) {
-    coment = 'スーパーの中を探検中。' + '\n' + '「」';
+    coment = 'スーパーの中を探検中。' + '\n' + '「天井に大穴あいてますねぇ」「でっかいまどや」';
   }
   const anchor = document.createElement('a');
   const hrefValue = 'https://twitter.com/intent/tweet?button_hashtag=' + encodeURIComponent('ミトとカエデのおいしい紅茶') + '&ref_src=twsrc%5Etfw';
