@@ -451,7 +451,7 @@ function tweet() {
   anchor.className = 'twitter-hashtag-button';
   anchor.setAttribute('data-text', 'ミトとカエデは' + coment + '　#ミトカエお紅茶');
   anchor.setAttribute('data-size', "large");
-  anchor.setAttribute('data-url', "https://concourse008.github.io/mitodash/index.html");
+  anchor.setAttribute('data-url', "https://concourse008.github.io/common/game03/index.html");
   anchor.innerText = 'Tweet #ミトカエお紅茶';
   const script = document.createElement('script');
   script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
