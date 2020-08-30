@@ -1,0 +1,27 @@
+body {
+  background-color: #e68ab8;
+  text-align:  left;
+  height: 750px;
+  margin-right: auto;
+  margin-left : auto;
+  position: relative;
+}
+canvas { 
+  border: 2px solid #000;
+  position:absolute;
+  top:20;
+  left:20;
+  margin-left: 10px;
+  margin-top: 10px;
+  visibility: hidden;
+  }
+
+  .image{
+    position: absolute;
+    bottom: 0;
+  }
+  #tweet-area {
+    position: absolute;
+    margin-left: 155px;
+    margin-top: 220px;
+  }
