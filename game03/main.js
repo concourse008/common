@@ -517,7 +517,46 @@ const look0 = new Check(2, 'どこを調べよう？', look0set);
 const menu1 = new Menu(1, 'でかいけどボロいなぁ');
 const fi102 = new Text(0, 'さっそく入ってみましょう', menu1);
 const fi101 = new Text(1, '近くに来るとよけいでかいなぁ', fi102);
-const look1 = new Branch(2, 'どこを調べよう？', 0, 0, 0, '', '', '');
+
+
+const lo10218 = new Text(1, 'そやね！');
+const lo10217 = new Text(1, 'ま、行ってから考えません？', lo10218);
+const lo10216 = new Text(1, 'どうでしょうねぇ……', lo10217);
+const lo10215 = new Text(1, 'うみかー、うみには飲み物ある？', lo10216);
+const lo10214 = new Text(1, '紅茶を飲み終わったら\n次は海に行きましょうか', lo10215);
+const lo10213 = new Text(1, 'うん！', lo10214);
+const lo10212 = new Text(1, '…………それは、いいですねぇ', lo10213);
+const lo10211 = new Text(1, 'おさかながｼｬｯて逃げた時に\nキラキラってしたのを思い出したわ', lo10212);
+const lo10210 = new Text(1, 'ああ、行きましたねぇ', lo10211);
+const lo1029 = new Text(1, 'おいしー！　　　\nこれあれ、こないだ川行ったやん？', lo10210);
+const lo1028 = new Text(1, 'あ、カエデちゃん気を付けないと……', lo1029);
+const lo1027 = new Text(1, 'いただきまーす！', lo1028);
+const lo1026 = new Text(1, 'はい、いい香りですねぇ……', lo1027);
+const lo1025 = new Text(1, 'できた！？これで完成！？', lo1026);
+const lo1024 = new Text(1, '　　・　　・　　・　　', lo1025);
+const lo1023 = new Text(1, 'まかせといて！', lo1024);
+const lo1022 = new Text(1, 'それじゃあ紅茶を作りますか\nカエデちゃん、火をお願いします', lo1023);
+const lo1021 = new Text(1, 'やったー！', lo1022);
+const lo1020 = new Text(1, 'よし！材料が全部そろいました！', lo1021);
+
+const lo1013 = new Text(1, 'さんせー……　　　　\nぐー…………');
+const lo1012 = new Text(0, '材料が揃ったら\nここでお茶を飲みましょうか', lo1013);
+const lo1011 = new Text(1, 'ぽかぽかするわー', lo1012);
+const lo1010 = new Text(0, 'このあたり、日向で良い感じですねぇ', lo1011);
+
+const look12 = new Branch(2, 'どこを調べよう？', lo1010n, 0, 0, 'そのへん', '', '');
+const look11 = new Branch(2, 'どこを調べよう？', lo1010, 0, 0, 'そのへん', '', '');
+const look10 = new Branch(2, 'どこを調べよう？', lo0000, 0, 0, 'そのへん', '', '');
+const look1set = function () {
+  if (itemflag[1] == 1 && itemflag[2] == 1 && itemflag[3] == 1 && itemflag[4] == 1 && itemflag[5] == 1 && itemflag[6] == 1 && itemflag[7] == 1 && itemflag[8] == 1 && itemflag[9] == 1 && itemflag[10] == 1 && itemflag[11] == 1) {
+    return look12;
+  } else if (itemflag[0] == 1) {
+    return look11;
+  } else {
+    return look10;
+  }
+};
+const look2 = new Check(2, 'どこを調べよう？', look2set);
 
 //紅茶店
 const menu2 = new Menu(0, 'ほとんどチリになってますねぇ……');
@@ -584,7 +623,7 @@ const fi306 = new Text(0, 'それは……食べられないですねぇ\n料理
 const fi305 = new Text(1, 'ミトちゃん！\nこれ食べれるんちゃう！？', fi306);
 const fi304 = new Text(0, 'ご飯を食べにくる所です\n色んな料理があったらしいですよ', fi305);
 const fi303 = new Text(1, 'ふぁみれすってなんなん？', fi304);
-const fi302 = new Text(0, '『ゼラリウム』……\nここはファミレスだったようですねぇ', fi303);
+const fi302 = new Text(0, '『ゼラニウム』……\nここはファミレスだったようですねぇ', fi303);
 const fi301 = new Text(1, 'うわ、すごい\n椅子がいっぱいや', fi302);
 
 const lo3035 = new Text(1, 'そうなんや……\nでんきって使いづらいなぁ');
