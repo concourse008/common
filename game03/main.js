@@ -138,7 +138,7 @@ function step() {
     ctx.fillText(talk.choice3, 230, 367);
   }
   if (itemlist == true) {//アイテム一覧表示
-    ctx.drawImage(backimages[7], 0, 0);
+    ctx.drawImage(backimages[9], 0, 0);
     for (let j = 0; j < getitem.length; j++) {
       ctx.font = "18px sans-serif";
       let addY = 18;
@@ -146,7 +146,7 @@ function step() {
       ctx.fillText(getitem[j], 30 + 190 * (j % 2), 60 + addY);
     }
     if (savetime == true) {
-      ctx.drawImage(backimages[8], 0, 10);
+      ctx.drawImage(backimages[10], 0, 10);
     }
   }
 }
