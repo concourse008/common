@@ -520,24 +520,24 @@ const fi101 = new Text(1, '近くに来るとよけいでかいなぁ', fi102);
 
 
 const lo10218 = new Text(1, 'そやね！');
-const lo10217 = new Text(1, 'ま、行ってから考えません？', lo10218);
-const lo10216 = new Text(1, 'どうでしょうねぇ……', lo10217);
+const lo10217 = new Text(0, 'ま、行ってから考えません？', lo10218);
+const lo10216 = new Text(0, 'どうでしょうねぇ……', lo10217);
 const lo10215 = new Text(1, 'うみかー、うみには飲み物ある？', lo10216);
-const lo10214 = new Text(1, '紅茶を飲み終わったら\n次は海に行きましょうか', lo10215);
+const lo10214 = new Text(0, '紅茶を飲み終わったら\n次は海に行きましょうか', lo10215);
 const lo10213 = new Text(1, 'うん！', lo10214);
-const lo10212 = new Text(1, '…………それは、いいですねぇ', lo10213);
+const lo10212 = new Text(0, '…………それは、いいですねぇ', lo10213);
 const lo10211 = new Text(1, 'おさかながｼｬｯて逃げた時に\nキラキラってしたのを思い出したわ', lo10212);
-const lo10210 = new Text(1, 'ああ、行きましたねぇ', lo10211);
+const lo10210 = new Text(0, 'ああ、行きましたねぇ', lo10211);
 const lo1029 = new Text(1, 'おいしー！　　　\nこれあれ、こないだ川行ったやん？', lo10210);
-const lo1028 = new Text(1, 'あ、カエデちゃん気を付けないと……', lo1029);
+const lo1028 = new Text(0, 'あ、カエデちゃん気を付けないと……', lo1029);
 const lo1027 = new Text(1, 'いただきまーす！', lo1028);
-const lo1026 = new Text(1, 'はい、いい香りですねぇ……', lo1027);
+const lo1026 = new Text(0, 'はい、いい香りですねぇ……', lo1027);
 const lo1025 = new Text(1, 'できた！？これで完成！？', lo1026);
-const lo1024 = new Text(1, '　　・　　・　　・　　', lo1025);
+const lo1024 = new Text(2, '　　・　　・　　・　　', lo1025);
 const lo1023 = new Text(1, 'まかせといて！', lo1024);
-const lo1022 = new Text(1, 'それじゃあ紅茶を作りますか\nカエデちゃん、火をお願いします', lo1023);
+const lo1022 = new Text(0, 'それじゃあ紅茶を作りますか\nカエデちゃん、火をお願いします', lo1023);
 const lo1021 = new Text(1, 'やったー！', lo1022);
-const lo1020 = new Text(1, 'よし！材料が全部そろいました！', lo1021);
+const lo1020 = new Text(0, 'よし！材料が全部そろいました！', lo1021);
 
 const lo1013 = new Text(1, 'さんせー……　　　　\nぐー…………');
 const lo1012 = new Text(0, '材料が揃ったら\nここでお茶を飲みましょうか', lo1013);
