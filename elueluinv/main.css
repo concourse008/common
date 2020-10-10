@@ -1,0 +1,59 @@
+body {
+  background-color: #00E232;
+  text-align:  left;
+  height: 750px;
+  margin-right: auto;
+  margin-left : auto;
+  position: relative;
+}
+canvas { 
+  border: 2px solid #000;
+  position:absolute;
+  top:20;
+  left:20;
+  margin-left: 1px;
+  margin-top: 1px;
+  visibility: hidden;
+  }
+
+  .image{
+    position: absolute;
+    bottom: 0;
+  }
+
+h1{
+  position:absolute;
+  display        : inline-block;
+  margin-top: 410px;
+  color          : #FF8633;            /* 文字の色 */
+  font-size      : 36pt;               /* 文字のサイズ */
+  letter-spacing : 4px;                /* 文字間 */
+  text-shadow    : 
+       4px  4px 3px #ffffff,
+      -4px  4px 3px #ffffff,
+       4px -4px 3px #ffffff,
+      -4px -4px 3px #ffffff,
+       4px  0px 3px #ffffff,
+       0px  4px 3px #ffffff,
+      -4px  0px 3px #ffffff,
+       0px -4px 3px #ffffff;        /* 文字の影 */
+       font-weight: bold;
+}
+h7{
+  position:absolute;
+  margin-top: 475px;
+  display        : inline-block;
+  color          : #000000;            /* 文字の色 */
+  font-size      : 15pt;               /* 文字のサイズ */
+  text-shadow:
+    1px  1px 0 #fff,
+   -1px  1px 0 #fff,
+    1px -1px 0 #fff,
+   -1px -1px 0 #fff;
+   font-weight: bold;
+}
+#tweet-area {
+  position: absolute;
+  margin-left: 155px;
+  margin-top: 220px;
+}
