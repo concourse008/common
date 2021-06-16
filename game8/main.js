@@ -145,9 +145,9 @@ canvas[2].addEventListener(eventStart, (e) => {
     point.y < 595
   ) {
     mito.s = 5;
-    console.log(point.x);
   }
   console.log(point.x);
+  console.log(point.y);
 });
 canvas[2].addEventListener(eventEnd, (e) => {
   //マウスの座標をカンバス内の座標と合わせる
