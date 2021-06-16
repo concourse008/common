@@ -120,7 +120,12 @@ function hit_block() {
 
 //クリック
 let point = 0;
-canvas[2].addEventListener("mousedown", (e) => {
+const ua = navigator.userAgent.toLowerCase(); //これは何？？
+const isSP = /iphone|ipod|ipad|android/.test(ua);
+const eventStart = isSP ? 'touchstart' : 'mousedown';
+const eventEnd = isSP ? 'touchend' : 'mouseup';
+const eventLeave = isSP ? 'touchmove' : 'mouseleave';
+canvas[2].addEventListener(eventStart, (e) => {
   //マウスの座標をカンバスないの座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
   point = {
@@ -139,7 +144,7 @@ canvas[2].addEventListener("mousedown", (e) => {
     mito.s = 5;
   }
 });
-canvas[2].addEventListener("mouseup", (e) => {
+canvas[2].addEventListener(eventEnd, (e) => {
   //マウスの座標をカンバス内の座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
   point = {
