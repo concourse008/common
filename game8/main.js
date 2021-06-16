@@ -73,7 +73,6 @@ function movekae() {
     bar = bar - 1;
   }
   let v_size = Math.sqrt(kaede.xs ** 2 + kaede.ys ** 2);
-  console.log(Math.sqrt(kaede.xs ** 2 + kaede.ys ** 2));
   kaede.xs = (kaede.xs / v_size) * kaede.s;
   kaede.ys = (kaede.ys / v_size) * kaede.s;
   kaede.x = kaede.x + kaede.xs / 60;
@@ -143,6 +142,7 @@ canvas[2].addEventListener(eventStart, (e) => {
   ) {
     mito.s = 5;
   }
+  console.log('move');
 });
 canvas[2].addEventListener(eventEnd, (e) => {
   //マウスの座標をカンバス内の座標と合わせる
