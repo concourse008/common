@@ -78,7 +78,11 @@ function movekae() {
   kaede.x = kaede.x + kaede.xs / 60;
   kaede.y = kaede.y + kaede.ys / 60;
   kaede.a = (Math.atan2(kaede.ys, kaede.xs) * 180) / Math.PI + 90;
-  if (mito.x >= 340 && mito.s <= 0 || mito.x <= 20 && mito.s >= 0 || mito.x < 340 && mito.x > 20) {
+  if (
+    (mito.x >= 340 && mito.s <= 0) ||
+    (mito.x <= 20 && mito.s >= 0) ||
+    (mito.x < 340 && mito.x > 20)
+  ) {
     mito.x = mito.x + mito.s;
   }
 }
@@ -102,7 +106,7 @@ function hit_block() {
         ) {
           kaede.ys = -kaede.ys;
           block[i][j] = 0;
-        }/* else if (
+        } /* else if (
           (30 + 50 * j - kaede.x) ** 2 + (150 - 8 + 30 * i - kaede.y) ** 2 <=
             12 ** 2 ||
           (70 + 50 * j - kaede.x) ** 2 + (150 - 8 + 30 * i - kaede.y) ** 2 <=
@@ -121,9 +125,9 @@ function hit_block() {
 let point = 0;
 const ua = navigator.userAgent.toLowerCase(); //これは何？？
 const isSP = /iphone|ipod|ipad|android/.test(ua);
-const eventStart = isSP ? 'touchstart' : 'mousedown';
-const eventEnd = isSP ? 'touchend' : 'mouseup';
-const eventLeave = isSP ? 'touchmove' : 'mouseleave';
+const eventStart = isSP ? "touchstart" : "mousedown";
+const eventEnd = isSP ? "touchend" : "mouseup";
+const eventLeave = isSP ? "touchmove" : "mouseleave";
 canvas[2].addEventListener(eventStart, (e) => {
   //マウスの座標をカンバスないの座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
@@ -141,8 +145,9 @@ canvas[2].addEventListener(eventStart, (e) => {
     point.y < 595
   ) {
     mito.s = 5;
+    console.log("move");
   }
-  console.log('move');
+  console.log("mov");
 });
 canvas[2].addEventListener(eventEnd, (e) => {
   //マウスの座標をカンバス内の座標と合わせる
