@@ -128,13 +128,20 @@ const isSP = /iphone|ipod|ipad|android/.test(ua);
 const eventStart = isSP ? "touchstart" : "mousedown";
 const eventEnd = isSP ? "touchend" : "mouseup";
 const eventLeave = isSP ? "touchmove" : "mouseleave";
-canvas[2].addEventListener(eventStart, (e) => {
+canvas[2].addEventListener("touchstart", (e) => {
   //マウスの座標をカンバスないの座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
   point = {
     x: e.clientX - rect.left,
     y: e.clientY - rect.top,
   };
+  if (!point.x) {
+    var touchObject = e.changedTouches[0];
+    point = {
+      x: touchObject.pageX - rect.left,
+      y: touchObject.pageY - rect.top,
+    };
+  }
   //ゲームの状況による
   if (point.x >= 10 && point.x < 90 && point.y >= 515 && point.y < 595) {
     mito.s = -5;
@@ -156,6 +163,13 @@ canvas[2].addEventListener(eventEnd, (e) => {
     x: e.clientX - rect.left,
     y: e.clientY - rect.top,
   };
+  if (!point.x) {
+    var touchObject = e.changedTouches[0];
+    point = {
+      x: touchObject.pageX - rect.left,
+      y: touchObject.pageY - rect.top,
+    };
+  }
   //ゲームの状況による
   if (point.x >= 10 && point.x <= 90 && point.y >= 515 && point.y <= 595) {
     mito.s = 0;
@@ -167,6 +181,7 @@ canvas[2].addEventListener(eventEnd, (e) => {
   ) {
     mito.s = 0;
   }
+  console.log("離れた");
 });
 
 //画面の描写全部
