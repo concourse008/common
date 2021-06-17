@@ -128,7 +128,7 @@ const isSP = /iphone|ipod|ipad|android/.test(ua);
 const eventStart = isSP ? "touchstart" : "mousedown";
 const eventEnd = isSP ? "touchend" : "mouseup";
 const eventLeave = isSP ? "touchmove" : "mouseleave";
-canvas[2].addEventListener("touchstart", (e) => {
+canvas[2].addEventListener(eventStart, (e) => {
   //マウスの座標をカンバスないの座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
   point = {
