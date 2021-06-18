@@ -18,13 +18,14 @@ const ctx0 = canvas[2].getContext("2d");
 const srcs = [["stage.png"], ["mito.png"], ["kaede2.png"], ["box.png"]];
 const icon = [
   ["b_kaede.png"],
-  ["b_turn.png"],
   ["b_unchi.png"],
   ["b_dush.png"],
+  ["b_turn.png"],
   ["b_left.png"],
   ["b_ag.png"],
   ["b_right.png"],
 ];
+const skill = [["unchi.png"]];
 
 let images = [];
 for (let i in srcs) {
@@ -36,21 +37,34 @@ for (let i in icon) {
   icons[i] = new Image();
   icons[i].src = icon[i][0];
 }
+let skills = [];
+for (let i in skill) {
+  skills[i] = new Image();
+  skills[i].src = skill[i][0];
+}
 
 //変数
 let mito = { x: 190, y: 488, s: 0 };
-let bar = 0;
+let bar = 0;//反射インターバル0.1秒
 let kaede = { x: 200, y: 300, a: 10, xs: 130, ys: -130, s: 200 }; //位置ｘｙ角度スピード
+let kaede_skill = [0, 0, 0, 0]; //反転・加速・うんち・メカクシ
+function skill_count_up(){
+  for(let k =3; k--;){
+    kaede_skill[k]++;
+  }
+}
 
 //カエデ移動・反射
 function movekae() {
   if (kaede.x >= 373 || kaede.x <= 22) {
     kaede.xs = -kaede.xs;
+    skill_count_up();
   } else if (kaede.y >= 500) {
     //TODO カエデポイント
     kaede.x = kaede.y = 200;
   } else if (kaede.y <= 108) {
     kaede.ys = -kaede.ys;
+    skill_count_up();
   } else if (kaede.y >= 485 && bar == 0) {
     if (kaede.x >= mito.x + 7 && kaede.x <= mito.x + 33) {
       kaede.ys = -kaede.ys;
@@ -106,18 +120,28 @@ function hit_block() {
         ) {
           kaede.ys = -kaede.ys;
           block[i][j] = 0;
-        } /* else if (
-          (30 + 50 * j - kaede.x) ** 2 + (150 - 8 + 30 * i - kaede.y) ** 2 <=
-            12 ** 2 ||
-          (70 + 50 * j - kaede.x) ** 2 + (150 - 8 + 30 * i - kaede.y) ** 2 <=
-            12 ** 2
-        ) {
-          console.log(0);
-          kaede.xs = -kaede.xs;
-          block[i][j] = 0;
-        }*/
+          skill_count_up();
+        }
       }
     }
+  }
+}
+
+//ミト・うんち衝突
+let unchi = [0, 510]; //カウント、X座標、Y座標
+function unchi_move() {
+  if (unchi[1] < 510) {
+    unchi[1] = unchi[1] + 2;
+  }
+}
+function unchi_hit() {
+  if (
+    unchi[1] > 450 &&
+    unchi[1] <= 490 &&
+    mito.x >= unchi[0] - 40 &&
+    mito.x < unchi[0] + 40
+  ) {
+    console.log("unchi hit");
   }
 }
 
@@ -143,6 +167,7 @@ canvas[2].addEventListener(eventStart, (e) => {
     };
   }
   //ゲームの状況による
+  //左右ミト移動
   if (point.x >= 10 && point.x < 90 && point.y >= 515 && point.y < 595) {
     mito.s = -5;
   } else if (
@@ -153,8 +178,31 @@ canvas[2].addEventListener(eventStart, (e) => {
   ) {
     mito.s = 5;
   }
-  console.log(point.x);
-  console.log(point.y);
+  //アンチグラビティーガード
+  if (point.x >= 110 && point.x < 270 && point.y >= 515 && point.y < 595) {
+    kaede.xs = -kaede.xs;
+    kaede.ys = -kaede.ys;
+  }
+  //反転
+  if (point.x >= 10 && point.x < 90 && point.y >= 5 && point.y < 85) {
+    bar = 0;
+    kaede.xs = -kaede.xs;
+    kaede.ys = -kaede.ys;
+  }
+  //加速
+  if (point.x >= 110 && point.x < 190 && point.y >= 5 && point.y < 85) {
+  }
+  //うんち
+  if (point.x >= 210 && point.x < 290 && point.y >= 5 && point.y < 85) {
+    if (kaede_skill[2] >= 3 && unchi[1] >= 510) {
+      kaede_skill[2] = 0; //カウントリセット
+      unchi[0] = kaede.x;
+      unchi[1] = kaede.y;
+    }
+  }
+  //メカクシ
+  if (point.x >= 310 && point.x < 390 && point.y >= 5 && point.y < 85) {
+  }
 });
 canvas[2].addEventListener(eventEnd, (e) => {
   //マウスの座標をカンバス内の座標と合わせる
@@ -181,7 +229,6 @@ canvas[2].addEventListener(eventEnd, (e) => {
   ) {
     mito.s = 0;
   }
-  console.log("離れた");
 });
 
 //画面の描写全部
@@ -190,6 +237,7 @@ function step() {
   ctx = canvas[flip].getContext("2d");
   ctx.clearRect(0, 0, 400, 800);
   ctx.drawImage(images[0], 10, 90);
+  //アイコン類
   for (let i = 4; i--; ) {
     ctx.drawImage(icons[i], 310 - 100 * i, 5);
   }
@@ -197,6 +245,10 @@ function step() {
     let ub = [310, 120, 10];
     ctx.drawImage(icons[6 - i], ub[i], 515);
   }
+  //スキル判定・表示
+  unchi_move();
+  unchi_hit();
+  ctx.drawImage(skills[0], unchi[0], unchi[1]);
   //ミト表示
   ctx.drawImage(images[1], mito.x, mito.y);
   //カエデ表示
