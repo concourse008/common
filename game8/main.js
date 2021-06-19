@@ -15,7 +15,7 @@ canvas[2].style.visibility = "visible";
 flip = 1 - flip;
 let ctx = canvas[flip].getContext("2d");
 const ctx0 = canvas[2].getContext("2d");
-const srcs = [["stage.png"], ["mito.png"], ["kaede2.png"], ["box.png"]];
+const srcs = [["stage.png"], ["mito.png"], ["kaede2.png"], ["box.png"], ["bace.png"],["title.png"],["req.png"]];
 const icon = [
   ["b_kaede.png"],
   ["b_unchi.png"],
@@ -25,7 +25,7 @@ const icon = [
   ["b_ag.png"],
   ["b_right.png"],
 ];
-const skill = [["unchi.png"],["bigkaede.png"]];
+const skill = [["unchi.png"], ["bigkaede.png"],["unchi_hit.png"],["mito_point.png"],["kaede_point.png"]];
 
 let images = [];
 for (let i in srcs) {
@@ -44,25 +44,71 @@ for (let i in skill) {
 }
 
 //変数
+let block = [//ブロック
+  [0, 1, 0, 1, 0, 1, 0],
+  [1, 0, 1, 0, 1, 0, 1],
+  [0, 1, 0, 1, 0, 1, 0],
+];
+let seen = 0;
 let mito = { x: 190, y: 488, s: 0 };
 let bar = 0; //反射インターバル0.03秒
-let kaede = { x: 200, y: 300, a: 10, xs: 130, ys: -130, s: 200 }; //位置ｘｙ角度スピード
-let kaede_skill = [10, 10, 10, 10,10]; //反転・加速・うんち・メカクシ・アンチ
-let kaede_skill_ok = [3,6,3,8,9];
+let kaede = { x: 200, y: 470, a: 10, xs: 0, ys: 0, s: 0 }; //位置ｘｙ角度スピード
+let kaede_skill = [10, 10, 3, 10, 10]; //反転・加速・うんち・メカクシ・アンチ
+let kaede_skill_ok = [3, 6, 3, 8, 9];
+let gamestop = 0;
+function reset(){//リセット
+  gamestop = 0;
+  kaede = { x: 210, y: 470, a: 10, xs: 130, ys: -130, s: 200 };
+  kaede_skill = [10, 10, 3, 10, 10];
+  mito.x = 190;
+  block = [//ブロック
+    [0, 1, 0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 1, 0, 1],
+    [0, 1, 0, 1, 0, 1, 0],
+  ];
+}
 function skill_count_up() {
-  for (let k = 5; k--; ) {
+  for (let k = 5; k--;) {
     kaede_skill[k]++;
   }
 }
-
+//ミトポイント
+let mito_get_point = -420;
+function mito_point(){
+  if(mito_get_point > 0){
+    mito_get_point = mito_get_point - 7;
+  }else if(mito_get_point > -20){
+    mito_get_point = mito_get_point - 0.2;
+  }else if(mito_get_point > -400){
+    mito_get_point = mito_get_point - 7;
+  }else if(mito_get_point <= -400 && mito_get_point != -420){
+    reset();
+    mito_get_point = -420;
+  }
+}
+//カエデポイント
+let kaede_get_point = -420;
+function kaede_point(){
+  if(kaede_get_point > 0){
+    kaede_get_point = kaede_get_point - 7;
+  }else if(kaede_get_point > -20){
+    kaede_get_point = kaede_get_point - 0.2;
+  }else if(kaede_get_point > -400){
+    kaede_get_point = kaede_get_point - 7;
+  }else if(kaede_get_point <= -400 && kaede_get_point != -420){
+    reset();
+    kaede_get_point = -420;
+  }
+}
 //カエデ移動・反射
 function movekae() {
   if (kaede.x >= 373 || kaede.x <= 22) {
     kaede.xs = -kaede.xs;
     skill_count_up();
-  } else if (kaede.y >= 500) {
+  } else if (kaede.y >= 500 && gamestop == 0) {
     //TODO カエデポイント
-    kaede.x = kaede.y = 200;
+    kaede_get_point = 400;
+    gamestop = 1;
   } else if (kaede.y <= 108) {
     kaede.ys = -kaede.ys;
     skill_count_up();
@@ -102,32 +148,29 @@ function movekae() {
   }
 }
 //カエデ加速・減速
-let kaede_speed = [0,0];//減速・加速
-function kaede_speed_check(){
-  if(kaede_speed[0] > 0 && kaede_speed[1]>0){
+let kaede_speed = [0, 0];//減速・加速
+function kaede_speed_check() {
+  if (kaede_speed[0] > 0 && kaede_speed[1] > 0) {
     kaede.s = 200;
     kaede_speed[0]--;
     kaede_speed[1]--;
-  }else if(kaede_speed[0] >0){
+  } else if (kaede_speed[0] > 0) {
     kaede.s = 100;
     kaede_speed[0]--;
-  }else if(kaede_speed[1] >0){
+  } else if (kaede_speed[1] > 0) {
     kaede.s = 400;
     kaede_speed[1]--;
-  }else{
+  } else {
     kaede.s = 200;
   }
+  if(gamestop == 1){
+    kaede.s = 10;
+  }
 }
-//ブロック
-let block = [
-  [0, 1, 0, 1, 0, 1, 0],
-  [1, 0, 1, 0, 1, 0, 1],
-  [0, 1, 0, 1, 0, 1, 0],
-];
 //ブロック衝突
 function hit_block() {
-  for (let i = 3; i--; ) {
-    for (let j = 7; j--; ) {
+  for (let i = 3; i--;) {
+    for (let j = 7; j--;) {
       if (block[i][j] == 1) {
         if (
           kaede.x >= 30 + 50 * j - 9 &&
@@ -143,7 +186,23 @@ function hit_block() {
     }
   }
 }
-
+//ブロック残ってるか
+function block_end(){
+  let sum = block[0].reduce(function(a,b){
+    return a+b;
+  });
+  let sum2 = block[1].reduce(function(a,b){
+    return a+b;
+  });
+  let sum3 = block[2].reduce(function(a,b){
+    return a+b;
+  });
+  if(sum + sum2 + sum3 + gamestop == 0){//ミト勝利
+    mito_get_point = 400;
+    kaede.s = 0;
+    gamestop = 1;
+  }
+}
 //ミト・うんち衝突
 let unchi = [0, 510]; //X座標、Y座標
 let unchi_hiting = 0;
@@ -162,17 +221,17 @@ function unchi_hit() {
     unchi_hiting = 120;
     unchi[1] = 510;
   }
-  if(unchi_hiting > 0){
+  if (unchi_hiting > 0) {
     mito.s = 0;
     unchi_hiting--;
   }
 }
 //メカクシかえで
 let bigkaede = 510;
-function mekakusi(){
-if(bigkaede < 510){
-  bigkaede = bigkaede + 10;
-}
+function mekakusi() {
+  if (bigkaede < 510) {
+    bigkaede = bigkaede + 10;
+  }
 }
 
 //クリック
@@ -197,46 +256,63 @@ canvas[2].addEventListener(eventStart, (e) => {
     };
   }
   //ゲームの状況による
-  //左右ミト移動
-  if (point.x >= 10 && point.x < 90 && point.y >= 515 && point.y < 595) {
-    mito.s = -5;
-  } else if (point.x >= 310 && point.x < 390 &&  point.y >= 515 && point.y < 595
-  ) {
-    mito.s = 5;
-  }
-  //アンチグラビティーガード
-  if (point.x >= 110 && point.x < 270 && point.y >= 515 && point.y < 595 && kaede_skill[4] >= 10) {
-    kaede_skill[4] = 0;
-    kaede.xs = -kaede.xs;
-    kaede.ys = -kaede.ys;
-  }
-  //反転
-  if (point.x >= 10 && point.x < 90 && point.y >= 5 && point.y < 85 && kaede_skill[0]>= 3) {
-    kaede_skill[0] = 0;
-    bar = 0;
-    kaede.xs = -kaede.xs;
-    kaede.ys = -kaede.ys;
-  }
-  //加速
-  if (point.x >= 110 && point.x < 190 && point.y >= 5 && point.y < 85) {
-    if (kaede_skill[1] >= 6 && kaede.s != 400) {
-      kaede_skill[1] = 0;
-      kaede_speed[1] = 30;
+  if (seen == 0) {
+    //スタート画面
+    if(point.x >= 100 && point.x < 290 && point.y >= 255 && point.y < 320){
+      seen = 2;
+      reset();
+      tweetDivided.innerHTML = '';
+    }else if(point.x >= 100 && point.x < 290 && point.y >= 330 && point.y < 390){
+      seen = 1;
+      tweetDivided.innerHTML = '';
     }
-  }
-  //うんち
-  if (point.x >= 210 && point.x < 290 && point.y >= 5 && point.y < 85) {
-    if (kaede_skill[2] >= 3 && unchi[1] >= 510) {
-      kaede_skill[2] = kaede_skill[2] - 3; //カウントリセット
-      unchi[0] = kaede.x;
-      unchi[1] = kaede.y;
+  } else if (seen == 1) {
+    //あそびかた画面
+    seen = 0;
+    tweet();
+  } else if (seen == 2) {
+    //対戦中
+    //左右ミト移動
+    if (point.x >= 10 && point.x < 90 && point.y >= 515 && point.y < 595) {
+      mito.s = -5;
+    } else if (point.x >= 310 && point.x < 390 && point.y >= 515 && point.y < 595
+    ) {
+      mito.s = 5;
     }
-  }
-  //メカクシ
-  if (point.x >= 310 && point.x < 390 && point.y >= 5 && point.y < 85) {
-    if(kaede_skill[3] >= 8 && bigkaede >= 510){
-      kaede_skill[3] = 0;
-      bigkaede = -300;
+    //アンチグラビティーガード
+    if (point.x >= 110 && point.x < 270 && point.y >= 515 && point.y < 595 && kaede_skill[4] >= 10) {
+      kaede_skill[4] = 0;
+      kaede.xs = -kaede.xs;
+      kaede.ys = -kaede.ys;
+    }
+    //反転
+    if (point.x >= 10 && point.x < 90 && point.y >= 5 && point.y < 85 && kaede_skill[0] >= 3) {
+      kaede_skill[0] = 0;
+      bar = 0;
+      kaede.xs = -kaede.xs;
+      kaede.ys = -kaede.ys;
+    }
+    //加速
+    if (point.x >= 110 && point.x < 190 && point.y >= 5 && point.y < 85) {
+      if (kaede_skill[1] >= 6 && kaede.s != 400) {
+        kaede_skill[1] = 0;
+        kaede_speed[1] = 30;
+      }
+    }
+    //うんち
+    if (point.x >= 210 && point.x < 290 && point.y >= 5 && point.y < 85) {
+      if (kaede_skill[2] >= 3 && unchi[1] >= 510) {
+        kaede_skill[2] = kaede_skill[2] - 3; //カウントリセット
+        unchi[0] = kaede.x;
+        unchi[1] = kaede.y;
+      }
+    }
+    //メカクシ
+    if (point.x >= 310 && point.x < 390 && point.y >= 5 && point.y < 85) {
+      if (kaede_skill[3] >= 8 && bigkaede >= 510) {
+        kaede_skill[3] = 0;
+        bigkaede = -300;
+      }
     }
   }
 });
@@ -273,6 +349,8 @@ function step() {
   ctx = canvas[flip].getContext("2d");
   ctx.clearRect(0, 0, 400, 800);
   ctx.drawImage(images[0], 10, 90);
+  //ゲームセット判定
+  block_end();
   //スキル判定・表示
   unchi_move();
   unchi_hit();
@@ -290,63 +368,63 @@ function step() {
   ctx.drawImage(images[2], -12, -12);
   ctx.restore();
   //ブロック表示
-  for (let i = 3; i--; ) {
-    for (let j = 7; j--; ) {
+  for (let i = 3; i--;) {
+    for (let j = 7; j--;) {
       if (block[i][j] == 1) {
         ctx.drawImage(images[3], 30 + 50 * j, 150 + 30 * i);
       }
     }
   }
+  //うんちヒット
+  if(unchi_hiting > 0){
+    ctx.drawImage(skills[2],mito.x,mito.y);
+  }
   //メカクシもみじ
   ctx.drawImage(skills[1], 10, bigkaede);
   //アイコン類
-  for (let i = 4; i--; ) {
+  for (let i = 4; i--;) {
     ctx.drawImage(icons[i], 310 - 100 * i, 5);
   }
-  for (let i = 3; i--; ) {
+  for (let i = 3; i--;) {
     let ub = [310, 120, 10];
     ctx.drawImage(icons[6 - i], ub[i], 515);
   }
   //スキルカウント
   ctx.save();
   ctx.font = "80px 'Impact'";
-ctx.lineWidth = "4";
-ctx.lineJoin = "miter";
-ctx.miterLimit = "5"
-  for(let i = 4;i--;){
-    if(kaede_skill[i] >= kaede_skill_ok[i]){
-    }else{
-      ctx.fillText(kaede_skill_ok[i]-kaede_skill[i],30+100*i,77);
+  ctx.lineWidth = "4";
+  ctx.lineJoin = "miter";
+  ctx.miterLimit = "5"
+  for (let i = 4; i--;) {
+    if (kaede_skill[i] >= kaede_skill_ok[i]) {
+    } else {
+      ctx.fillText(kaede_skill_ok[i] - kaede_skill[i], 30 + 100 * i, 77);
     }
   }
-  if(kaede_skill[4] >= kaede_skill_ok[4]){
-  }else{
-    ctx.fillText(kaede_skill_ok[4]-kaede_skill[4],180,585);
+  if (kaede_skill[4] >= kaede_skill_ok[4]) {
+  } else {
+    ctx.fillText(kaede_skill_ok[4] - kaede_skill[4], 180, 585);
   }
   ctx.restore();
+  //フタ
+  ctx.drawImage(images[4], 0, 0);
+  //ポイント
+  mito_point();
+  ctx.drawImage(skills[3],mito_get_point,280);
+  kaede_point();
+  ctx.drawImage(skills[4],kaede_get_point,280);
+  //タイトル
+  if(seen==0){
+    ctx.drawImage(images[5],0,0);
+  }else if(seen ==1){
+    ctx.drawImage(images[6],0,0);
+  }
   //
   canvas[1 - flip].style.visibility = "hidden";
   canvas[flip].style.visibility = "visible";
   flip = 1 - flip;
 }
 step();
-
-//ハイスコア
-let totalscore = 0;
-function getup() {
-  localStorage.setItem("score", 0);
-  totalscore = Number(localStorage.getItem("score"));
-}
-function setup() {
-  totalscore = Number(localStorage.getItem("score"));
-}
-if (!localStorage.getItem("score")) {
-  //ストレージなし
-  getup();
-} else {
-  //ストレージあり
-  setup();
-}
 
 //ツイートボタン
 const tweetDivided = document.getElementById("tweet-area");
@@ -357,26 +435,20 @@ function tweet() {
   const anchor = document.createElement("a");
   const hrefValue =
     "https://twitter.com/intent/tweet?button_hashtag=" +
-    encodeURIComponent("カエデログ") +
+    encodeURIComponent("ミトカエブロック") +
     "&ref_src=twsrc%5Etfw";
   anchor.setAttribute("herf", hrefValue);
   anchor.className = "twitter-hashtag-button";
-  anchor.setAttribute(
-    "data-text",
-    "ケーキの上を" +
-      way +
-      "センチメートル走り抜けました！　" +
-      coment +
-      "　#ミトダッシュ"
-  );
+  anchor.setAttribute('data-text', '今度のミトとカエデはブロック崩しで勝負や！　#ミトカエブロック');
   anchor.setAttribute("data-size", "large");
   anchor.setAttribute(
     "data-url",
-    "https://concourse008.github.io/mitodash/index.html"
+    "https://concourse008.github.io/common/game8/"
   );
-  anchor.innerText = "Tweet #カエデログ";
+  anchor.innerText = "Tweet #ミトカエブロック";
   const script = document.createElement("script");
   script.setAttribute("src", "https://platform.twitter.com/widgets.js");
   tweetDivided.appendChild(script);
   tweetDivided.appendChild(anchor);
 }
+tweet();

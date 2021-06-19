@@ -1,5 +1,5 @@
 body {
-  background-color: #00E232;
+  background-color: #4adfe4;
   text-align:  left;
   height: 750px;
   margin-right: auto;
@@ -55,5 +55,5 @@ h7{
 #tweet-area {
   position: absolute;
   margin-left: 155px;
-  margin-top: 220px;
+  margin-top: 410px;
 }
