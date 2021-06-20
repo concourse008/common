@@ -237,27 +237,31 @@ function block_end(){
   }
 }
 //ミト・うんち衝突
-let unchi = [0, 510]; //X座標、Y座標
+let unchi = [[0, 510],[0,510],[0,510]]; //X座標、Y座標
 let unchi_hiting = 0;
 function unchi_move() {
-  if (unchi[1] < 510) {
-    unchi[1] = unchi[1] + 2;
+  for(let i = 3; i--;){
+  if (unchi[i][1] < 510) {
+    unchi[i][1] = unchi[i][1] + 2;
   }
 }
+}
 function unchi_hit() {
+  for(let i = 3; i--;){
   if (
-    unchi[1] > 450 &&
-    unchi[1] <= 490 &&
-    mito.x >= unchi[0] - 40 &&
-    mito.x < unchi[0] + 40
+    unchi[i][1] > 450 &&
+    unchi[i][1] <= 490 &&
+    mito.x >= unchi[i][0] - 40 &&
+    mito.x < unchi[i][0] + 40
   ) {
     unchi_hiting = 120;
-    unchi[1] = 510;
+    unchi[i][1] = 510;
   }
   if (unchi_hiting > 0) {
     mito.s = 0;
     unchi_hiting--;
   }
+}
 }
 //メカクシかえで
 let bigkaede = 510;
@@ -337,11 +341,13 @@ canvas[2].addEventListener(eventStart, (e) => {
     }
     //うんち
     if (point.x >= 210 && point.x < 290 && point.y >= 5 && point.y < 85) {
-      if (kaede_skill[2] >= 3 && unchi[1] >= 510) {
+      for(let i = 3; i--;){
+      if (kaede_skill[2] >= 3 && unchi[i][1] >= 510) {
         kaede_skill[2] = kaede_skill[2] - 3; //カウントリセット
-        unchi[0] = kaede.x;
-        unchi[1] = kaede.y;
-      }
+        unchi[i][0] = kaede.x;
+        unchi[i][1] = kaede.y;
+        break;
+      }}
     }
     //メカクシ
     if (point.x >= 310 && point.x < 390 && point.y >= 5 && point.y < 85) {
@@ -378,6 +384,57 @@ canvas[2].addEventListener(eventEnd, (e) => {
     mito.s = 0;
   }
 });
+//キーボード操作
+document.body.addEventListener('keydown',
+    event => {
+        if (event.key === 'a') {
+          mito.s = -5;
+        }
+        if (event.key === 'd') {
+          mito.s = 5;
+        }
+        if (event.key === 'w') {
+          kaede_skill[4] = 0;
+          kaede.xs = -kaede.xs;
+          kaede.ys = -kaede.ys;
+        }
+        if (event.key === 'j') {
+          kaede_skill[0] = 0;
+          bar = 0;
+          kaede.xs = -kaede.xs;
+          kaede.ys = -kaede.ys;
+        }
+        if (event.key === 'i') {
+          if (kaede_skill[1] >= 6 && kaede.s != 400) {
+            kaede_skill[1] = 0;
+            kaede_speed[1] = 30;
+          }
+        }
+        if (event.key === 'k') {
+          for(let i = 4; i--;){
+          if (kaede_skill[2] >= 3 && unchi[i][1] >= 510) {
+            kaede_skill[2] = kaede_skill[2] - 3; //カウントリセット
+            unchi[i][0] = kaede.x;
+            unchi[i][1] = kaede.y;
+          }}
+        }
+        if (event.key === 'l') {
+          if (kaede_skill[3] >= 8 && bigkaede >= 510) {
+            kaede_skill[3] = 0;
+            bigkaede = -300;
+          }
+        }
+    });
+
+    document.body.addEventListener('keyup',
+    event => {
+        if (event.key === 'a') {
+          mito.s = 0;
+        }
+        if (event.key === 'd') {
+          mito.s = 0;
+        }
+    });
 
 //画面の描写全部
 function step() {
@@ -391,7 +448,9 @@ function step() {
   unchi_move();
   unchi_hit();
   mekakusi();
-  ctx.drawImage(skills[0], unchi[0], unchi[1]);
+  for(let i =3; i--;){
+  ctx.drawImage(skills[0], unchi[i][0], unchi[i][1]);
+  }
   kaede_speed_check();
   //ミト表示
   ctx.drawImage(images[1], mito.x, mito.y);
