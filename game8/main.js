@@ -393,12 +393,12 @@ document.body.addEventListener('keydown',
         if (event.key === 'd') {
           mito.s = 5;
         }
-        if (event.key === 'w') {
+        if (event.key === 'w'&& kaede_skill[4] >= 10) {
           kaede_skill[4] = 0;
           kaede.xs = -kaede.xs;
           kaede.ys = -kaede.ys;
         }
-        if (event.key === 'j') {
+        if (event.key === 'j'&& kaede_skill[0] >= 3) {
           kaede_skill[0] = 0;
           bar = 0;
           kaede.xs = -kaede.xs;
