@@ -411,7 +411,7 @@ document.body.addEventListener('keydown',
           }
         }
         if (event.key === 'k') {
-          for(let i = 4; i--;){
+          for(let i = 3; i--;){
           if (kaede_skill[2] >= 3 && unchi[i][1] >= 510) {
             kaede_skill[2] = kaede_skill[2] - 3; //カウントリセット
             unchi[i][0] = kaede.x;
