@@ -47,16 +47,9 @@
     <meta name="apple-mobile-web-app-title" content="TAP10" />
     <!-- ホーム画面に表示されるアプリアイコン -->
     <link rel="apple-touch-icon" href="152.png" />
+
     <!-- ウェブアプリマニフェストの読み込み -->
     <link rel="manifest" href="manifest.json" />
-    <!-- ServiceWorkerの登録 -->
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("sw.js").then((reg) => {
-          console.log("Service worker registered.", reg);
-        });
-      }
-    </script>
     <title>ミトカエ対戦ブロック崩し</title>
   </head>
   <body>
@@ -97,5 +90,14 @@
       integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
       crossorigin="anonymous"
     ></script>
+    
+    <!-- ServiceWorkerの登録 -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js").then((reg) => {
+          console.log("Service worker registered.", reg);
+        });
+      }
+    </script>
   </body>
 </html>
