@@ -1,6 +1,6 @@
 {
-  "name":"MK_block",
-  "short_name":"MK_block",
+  "name":"MK_bloc",
+  "short_name":"MK_bloc",
   "icons": [{
       "src": "192.png",
       "sizes":"192x192",
@@ -10,7 +10,7 @@
       "sizes":"512x512",
       "type": "image/png"
     }],
-  "start_url": "https://concourse008.github.io/common/game8/index.html?utm_source=homescreen",
+  "start_url": "https://concourse008.github.io/common/game8/",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF"
