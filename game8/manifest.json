@@ -10,7 +10,7 @@
       "sizes":"512x512",
       "type": "image/png"
     }],
-  "start_url": "https://concourse008.github.io/common/game8/",
+  "start_url": "https://concourse008.github.io/common/game8/app.html",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF"
