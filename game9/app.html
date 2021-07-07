@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <!--ツイッターカード-->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:description"
+      content="カエデのおつかいを見送る放置系ゲーム"
+    />
+    <meta name="twitter:title" content="カエデログ２" />
+    <meta
+      name="twitter:url"
+      content="https://concourse008.github.io/common/game9/"
+    />
+    <meta
+      name="twitter:image"
+      content="https://concourse008.github.io/common/game9/image.png"
+    />
+    <meta name="twitter:image:width" content="678" />
+    <meta name="twitter:image:height" content="452" />
+    <meta name="twitter:creator" content="@e_vuna" />
+    <meta name="twitter:site" content="@e_vuna" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=320,
+      height=480,
+      initial-scale=1.0,
+      minimum-scale=1.0,
+      maximum-scale=2.0,
+      user-scalable=yes"
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <!--CSS-->
+    <link rel="stylesheet" href="app.css" />
+    <link
+      rel="stylesheet"
+      href="https://concourse008.github.io/common/common.css"
+    />
+    <!-- アドレスバー等のブラウザのUIを非表示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- default（Safariと同じ） / black（黒） / black-translucent（ステータスバーをコンテンツに含める） -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- ホーム画面に表示されるアプリ名 -->
+    <meta name="apple-mobile-web-app-title" content="TAP10" />
+    <!-- ホーム画面に表示されるアプリアイコン -->
+    <link rel="apple-touch-icon" href="152.png" />
+
+    <!-- ウェブアプリマニフェストの読み込み -->
+    <link rel="manifest" href="manifest.json" />
+    <title>カエデログ２</title>
+  </head>
+  <body>
+    <div id="center">
+      <div id="bace">
+        <canvas id="canvas1" width="750" height="1275"></canvas>
+        <canvas id="canvas2" width="750" height="1275"></canvas>
+        <canvas id="canvas0" width="750" height="1275"></canvas>
+      </div>
+    </div>
+    <div class="tweet-area" id="tweet-area"></div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="main.js"></script>
+    <!-- ServiceWorkerの登録 -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js").then((reg) => {
+          console.log("Service worker registered.", reg);
+        });
+      }
+    </script>
+  </body>
+</html>
