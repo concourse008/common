@@ -1,4 +1,11 @@
 "use strict";
+$(document).ready(function(){
+  if(window.innerWidth >= window.innerHeight){
+    $('#bace').css({'height':'100vh','width':'57vh'});
+  }else{
+    $('#bace').css({'height':'176vw','width':'100vw'});
+  }
+});
 //var canvas = document.getElementById('maincanvas');
 const canvas = {
   0: document.getElementById("canvas1"),

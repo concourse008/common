@@ -1,5 +1,5 @@
 body {
-  background-color: #4adfe4;
+  background-color: hsl(39, 100%, 77%);
   text-align: left;
   margin-right: auto;
   margin-left: auto;
@@ -12,14 +12,15 @@ body {
 }
 
 #center{
-  
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #bace{
   position: absolute;
-  height: 170vw;
-  width: 100vw;
-  top:50%;
 }
 canvas{
   position: absolute;
