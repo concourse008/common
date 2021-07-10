@@ -1,9 +1,12 @@
 "use strict";
+let rate = 0;
 $(document).ready(function(){
-  if(window.innerWidth >= window.innerHeight){
+  if(window.innerWidth*16 >= window.innerHeight*9){
     $('#bace').css({'height':'100vh','width':'57vh'});
+    rate = 1320 / window.innerHeight;
   }else{
     $('#bace').css({'height':'176vw','width':'100vw'});
+    rate = 750 / window.innerWidth;
   }
 });
 //var canvas = document.getElementById('maincanvas');
@@ -39,26 +42,69 @@ for (let i in button) {
   buttons[i].src = button[i][0];
 }
 
+//イベントクラス
+class Log {
+  constructor(log){
+    this.log = log;
+  }
+}
+class Event extends Log {
+  constructor(log,elog,check){
+    super(log);
+    this.elog = elog;
+    this.check = check;
+  }
+}
+
 //変数宣言
 let seen = -1;//-1タイトル画面。0ステータス画面。1行先選択。2進行中。3アドバイス
-let stats = [1,1,1,1,1,1,1,1,1,1];
+let stats = [1,1,1,1,1,1,1,1,1];
+let last_log = [];
 
-//クリックでジャンプする
+//ログ内容
+const n1 = new Log('スキップしていた。');
+
+const e1 = new Event('石を飛び越えた。','石につまづいて転んだ。',0);
+
+//処理系
+
+//クリック
 let point = 0;
-let rate = 0;
 canvas[2].addEventListener("click", (e) => {
-  //マウスの座標をカンバスないの座標と合わせる
+  //マウスの座標をカンバス内の座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
-  rate = 750 / window.innerWidth;
   point = {
     x: (e.clientX - rect.left)*rate,
     y: (e.clientY - rect.top)*rate,
   };
-  if(seen==-1){
+  if(seen==-1){//タイトル
     seen = 0;
-  }else if(seen=0){
-
+    //TODO ゲーム一覧へのリンク
+  }else if(seen==0){//ステータス画面
+    //TODO アドバイス画面への移動
+  }else if(seen==1){//行先選択
+    //TODO 行き先リストスクロール
+    //TODO 行き先選択
+    //TODO 行き先確定ボタン
+  }else if(seen==2){//進行中・ログ
+    //TODO ログスクロール
+  }else if(seen==3){//アドバイス
+    //TODO アドバイス入力
+    //TODO アドバイス確定
+    //TODO アドバイス効果確認 どのステータスが上がるか教えてもらえる
+  }else{}
+  if(point.y >= 1193){
+    if(point.x<= 250){
+      seen=0;
+    }else if(point.x<=500){
+      seen=1;
+    }else if(point.x<=750){
+      seen=2;
+    }
+    
   }
+  //TODO ページ間の移動
+  console.log(point.x + ',' + point.y);
 });
 
 //画面の描写全部
@@ -66,13 +112,13 @@ function step() {
   ctx.font = "40px 'ＭＳ Pゴシック'";
   window.requestAnimationFrame(step);
   ctx = canvas[flip].getContext("2d");
-  ctx.clearRect(0, 0, 750, 1275);
+  ctx.clearRect(0, 0, 750, 1320);
   if(seen==-1){//タイトル
     ctx.drawImage(images[0],0,0);
   }else if(seen==0){//ステータス
     ctx.drawImage(images[1],0,0);
   }else if(seen==1){//行先選択
-
+    ctx.drawImage(images[2],0,0);
   }else if(seen==2){//進行中
 
   }else if(seen==3){//アドバイス
