@@ -23,8 +23,9 @@ flip = 1 - flip;
 let ctx = canvas[flip].getContext("2d");
 const ctx0 = canvas[2].getContext("2d");
 const srcs = [["title.png"], ["home.png"], ["log.png"]];
-const button = [["menu.png"]];
-const icon = [["2.jpg"]];
+const button = [["menu.png"],["go.png"]];
+const icon = [["nomal_k.png"],["good_k.png"],["bad_k.png"]];
+const stage = [["stage1.png"]];
 
 let images = [];
 for (let i in srcs) {
@@ -40,6 +41,11 @@ let icons = [];
 for (let i in icon) {
   icons[i] = new Image();
   icons[i].src = icon[i][0];
+}
+let stages = [];
+for (let i in stage){
+  stages[i] = new Image();
+  stages[i].src = stage[i][0];
 }
 
 //イベントクラス
@@ -68,6 +74,8 @@ class Way {
 let seen = -1; //-1タイトル画面。0ステータス画面。1行先選択。2進行中。3アドバイス
 let stats = [1, 1, 1, 1, 1, 1, 1, 1, 1];
 let last_log = [];
+let stage_select = false;
+let stage_start = false;
 
 //おつかい先
 const way1 = new Way("コンビニ", 200, 10, 3);
@@ -75,21 +83,38 @@ const way_all = [way1];
 let way_clear = [0];
 
 //ログ内容
-const n1 = new Log("スキップしてすすんだ。");
+const n1 = new Log("スキップしてすすんだ。\n「ええかんじや！」");
 
-const e1 = new Event("石を飛び越えた。", "石につまづいて転んだ。", 0);
+const e1 = new Event("石を飛び越えた。\n「ぴょーん！」", "石につまづいて転んだ。\n「ぶえっ」", 0);
 
 //処理系
 let time = 0;
-function plus_log() {
+function plus_log() {//ログ
+  let new_log = 0;
   //ログ追加
-  //イベントかログか判定
+  if(time%4==3){
+    new_log = e1;
+  }else{
+    new_log = n1;
+  }  //イベントかログか判定
+  if(new_log.elog){//イベントの場合
   //イベントなら成功失敗判定
-  //ログをlast_logに追加
-  last_log.unshift([n1, time]);
+  let dice = Math.floor(Math.random()*6+1);
+  if (stats[new_log.check]+dice >= 4){
+    last_log.unshift([new_log.log,time,1]);
+  }else{
+    last_log.unshift([new_log.elog,time,2]);
+  }
+  }else{//ノーマルの場合
+    last_log.unshift([new_log.log,time,0]);
+  }
   time = time+3;
-  console.log(last_log);
+  if(time >= 73){
+    clearInterval(gogo);
+  }
 }
+const gogo = 0;
+
 
 //クリック
 let point = 0;
@@ -122,7 +147,16 @@ canvas[2].addEventListener("click", (e) => {
     //行先選択
     //TODO 行き先リストスクロール
     //TODO 行き先選択
+    if(point.y >= 300 && point.y<480 && !stage_start){
+      stage_select = true;
+    }
     //TODO 行き先確定ボタン
+    if(point.x >= 540 && point.x < 720 && point.y >= 950 && point.y < 1185 && stage_select){
+      seen = 2;
+      stage_start = true;
+      stage_select = false;
+      gogo = setInterval(plus_log,10000/4);
+    }
   } else if (seen == 2) {
     plus_log();//仮
     //進行中・ログ
@@ -155,16 +189,28 @@ function step() {
   } else if (seen == 1) {
     //行先選択
     c.drawImage(images[2], 0, 0);
+    c.drawImage(stages[0],0,300);
+    c.fillText("目標：ピヨチキ（コンビニ）", 280, 350);
+    c.fillText("難度：★☆☆☆☆", 280, 400);
+    c.fillText("距離：200メートル", 280, 450);
+    if(stage_select){
+      c.drawImage(buttons[1],540,950);
+    }
   } else if (seen == 2) {
     //進行中
     c.drawImage(images[2], 0, 0);
     for (let i = last_log.length; i--;) {
       let n = i*150;
       let t = time - last_log[i][1];
-      c.fillText(t+"分前", 180, 330+n);
-      c.fillText(last_log[i][0].log, 180, 380+n);
-      c.fillText("「ええかんじや！」", 180, 420+n);
-      c.drawImage(icons[0], 30, 300+n, 130, 130);
+      c.fillText(t+"分前", 620, 340+n);
+      for (let lines = (String(last_log[i][0])).split("\n"), j = 0, l = lines.length; l > j; j++) {
+        let line = lines[j];
+        let addY = 40 *j;
+        c.fillText(line, 180, 370 + n + addY);
+      }
+//      c.fillText(last_log[i][0], 180, 380+n);
+//      c.fillText("「ええかんじや！」", 180, 420+n);
+      c.drawImage(icons[last_log[i][2]], 30, 300+n);
     }
   } else if (seen == 3) {
     //アドバイス
