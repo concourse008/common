@@ -89,10 +89,12 @@ const e1 = new Event("石を飛び越えた。\n「ぴょーん！」", "石に�
 
 //処理系
 let time = 0;
+let life = 3;
 function plus_log() {//ログ
   let new_log = 0;
+  let eve = Math.floor(Math.random()*3+1);
   //ログ追加
-  if(time%4==3){
+  if(eve == 1){
     new_log = e1;
   }else{
     new_log = n1;
@@ -104,16 +106,26 @@ function plus_log() {//ログ
     last_log.unshift([new_log.log,time,1]);
   }else{
     last_log.unshift([new_log.elog,time,2]);
+    life = life - 1;
   }
   }else{//ノーマルの場合
     last_log.unshift([new_log.log,time,0]);
   }
-  time = time+3;
-  if(time >= 73){
+  time = time+eve;
+  if(life == 0){
+    last_log.unshift(["へこたれてしまった！\n「あかんわー……」",time,2]);
     clearInterval(gogo);
+    stage_start = false;
+    life = 3;
+  }
+  if(time == 51){
+    last_log.unshift(["目的地に到着！！\n「やったー！」",time,1]);
+    clearInterval(gogo);
+    stage_start = false;
+    life = 3;
   }
 }
-const gogo = 0;
+let gogo = 0;
 
 
 //クリック
@@ -155,10 +167,11 @@ canvas[2].addEventListener("click", (e) => {
       seen = 2;
       stage_start = true;
       stage_select = false;
+      last_log = [];
+      time = 0;
       gogo = setInterval(plus_log,10000/4);
     }
   } else if (seen == 2) {
-    plus_log();//仮
     //進行中・ログ
     //TODO ログスクロール
   } else if (seen == 3) {
