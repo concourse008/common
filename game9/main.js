@@ -76,6 +76,7 @@ let stats = [1, 1, 1, 1, 1, 1, 1, 1, 1];
 let last_log = [];
 let stage_select = false;
 let stage_start = false;
+let scrol = [0,0];
 
 //おつかい先
 const way1 = new Way("コンビニ", 200, 10, 3);
@@ -130,7 +131,7 @@ let gogo = 0;
 
 //クリック
 let point = 0;
-canvas[2].addEventListener("click", (e) => {
+canvas[2].addEventListener("mousedown", (e) => {
   //マウスの座標をカンバス内の座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
   point = {
@@ -145,6 +146,7 @@ canvas[2].addEventListener("click", (e) => {
       seen = 1;
     } else if (point.x <= 750) {
       seen = 2;
+      scrol[1] = 0;
     }
   }
 
@@ -174,6 +176,8 @@ canvas[2].addEventListener("click", (e) => {
   } else if (seen == 2) {
     //進行中・ログ
     //TODO ログスクロール
+    scrol[0] = point.y;
+    scrol_on = true;
   } else if (seen == 3) {
     //アドバイス
     //TODO アドバイス入力
@@ -181,6 +185,24 @@ canvas[2].addEventListener("click", (e) => {
     //TODO アドバイス効果確認 どのステータスが上がるか教えてもらえる
   }
 });
+//スクロール
+let scrol_on = false;
+canvas[2].addEventListener('mousemove',(e) => {
+    //マウスの座標をカンバス内の座標と合わせる
+    const rect = canvas[2].getBoundingClientRect();
+    point = {
+      x: (e.clientX - rect.left) * rate,
+      y: (e.clientY - rect.top) * rate,
+    };
+    if(seen == 2 && scrol_on){
+      scrol[1] = scrol[1] + point.y - scrol[0];
+      scrol[0] = point.y;
+      console.log(scrol[1]);
+    }
+})
+canvas[2].addEventListener('mouseup',(e)=>{
+  scrol_on = false;
+})
 
 //画面の描写全部
 const m_canvas = document.createElement("canvas");
@@ -215,15 +237,15 @@ function step() {
     for (let i = last_log.length; i--;) {
       let n = i*150;
       let t = time - last_log[i][1];
-      c.fillText(t+"分前", 620, 340+n);
+      c.fillText(t+"分前", 620, 340 + n + scrol[1]);
       for (let lines = (String(last_log[i][0])).split("\n"), j = 0, l = lines.length; l > j; j++) {
         let line = lines[j];
         let addY = 40 *j;
-        c.fillText(line, 180, 370 + n + addY);
+        c.fillText(line, 180, 370 + n + addY + scrol[1]);
       }
 //      c.fillText(last_log[i][0], 180, 380+n);
 //      c.fillText("「ええかんじや！」", 180, 420+n);
-      c.drawImage(icons[last_log[i][2]], 30, 300+n);
+      c.drawImage(icons[last_log[i][2]], 30, 300 + n + scrol[1]);
     }
   } else if (seen == 3) {
     //アドバイス
