@@ -22,7 +22,7 @@ canvas[2].style.visibility = "visible";
 flip = 1 - flip;
 let ctx = canvas[flip].getContext("2d");
 const ctx0 = canvas[2].getContext("2d");
-const srcs = [["title.png"], ["home.png"], ["log.png"]];
+const srcs = [["title.png"], ["home.png"], ["log.png"], ["way.png"], ["1.png"]];
 const button = [["menu.png"],["go.png"]];
 const icon = [["nomal_k.png"],["good_k.png"],["bad_k.png"]];
 const stage = [["stage1.png"]];
@@ -125,19 +125,35 @@ function plus_log() {//ログ
     stage_start = false;
     life = 3;
   }
+  if(scrol[1] != 0){
+    scrol[1] = scrol[1] -150;
+  }
 }
 let gogo = 0;
 
 
 //クリック
+
 let point = 0;
-canvas[2].addEventListener("mousedown", (e) => {
+const ua = navigator.userAgent.toLowerCase(); //これは何？？
+const isSP = /iphone|ipod|ipad|android/.test(ua);
+const eventStart = isSP ? "touchstart" : "mousedown";
+const eventEnd = isSP ? "touchend" : "mouseup" ;
+const eventLeave = isSP ? "touchmove" : "mousemove";
+canvas[2].addEventListener(eventStart, (e) => {
   //マウスの座標をカンバス内の座標と合わせる
   const rect = canvas[2].getBoundingClientRect();
   point = {
     x: (e.clientX - rect.left) * rate,
     y: (e.clientY - rect.top) * rate,
   };
+  if (!point.x) {
+    var touchObject = e.changedTouches[0];
+    point = {
+      x: (touchObject.pageX - rect.left)*rate,
+      y: (touchObject.pageY - rect.top)*rate,
+    };
+  }
   if (point.y >= 1193) {
     //ページ間の移動
     if (point.x <= 250) {
@@ -184,24 +200,63 @@ canvas[2].addEventListener("mousedown", (e) => {
     //TODO アドバイス確定
     //TODO アドバイス効果確認 どのステータスが上がるか教えてもらえる
   }
+  //console.log(Math.floor(point.x),Math.floor(point.y));
 });
 //スクロール
 let scrol_on = false;
-canvas[2].addEventListener('mousemove',(e) => {
+canvas[2].addEventListener(eventLeave,(e) => {
     //マウスの座標をカンバス内の座標と合わせる
     const rect = canvas[2].getBoundingClientRect();
     point = {
       x: (e.clientX - rect.left) * rate,
       y: (e.clientY - rect.top) * rate,
     };
-    if(seen == 2 && scrol_on){
-      scrol[1] = scrol[1] + point.y - scrol[0];
+    if (!point.x) {
+      var touchObject = e.changedTouches[0];
+      point = {
+        x: (touchObject.pageX - rect.left)*rate,
+        y: (touchObject.pageY - rect.top)*rate,
+      };
+    }
+     if(seen == 2 && scrol_on ){
+      //スクロール量計算
+      let ss = 0;
+      if(last_log.length < 7){
+        ss = scrol[1];
+      }else{
+        ss = last_log.length * 150 - 900 + scrol[1];
+      }
+      if(scrol[1] >= 30 && point.y - scrol[0] > 0){
+
+      }else if(scrol[1]>20 && point.y - scrol[0] > 0){
+        scrol[1] = scrol[1] + (point.y - scrol[0]) / 10;
+      }else if(scrol[1]>10 && point.y - scrol[0] > 0){
+        scrol[1] = scrol[1] + (point.y - scrol[0]) / 5;
+      }else if(scrol[1]>0 && point.y - scrol[0] > 0){
+        scrol[1] = scrol[1] + (point.y - scrol[0]) / 2;
+      }else if(ss <= -30 && point.y - scrol[0] < 0){
+
+      }else if(ss <= -20 && point.y - scrol[0] < 0){
+        scrol[1] = scrol[1] + (point.y - scrol[0]) / 10;
+      }else if(ss <= -10 && point.y - scrol[0] < 0){
+        scrol[1] = scrol[1] + (point.y - scrol[0]) / 5;
+      }else if(ss < 0 && point.y - scrol[0] < 0){
+        scrol[1] = scrol[1] + (point.y - scrol[0]) / 2;
+      }else{
+        scrol[1] = scrol[1] + point.y - scrol[0];
+      }
       scrol[0] = point.y;
-      console.log(scrol[1]);
     }
 })
-canvas[2].addEventListener('mouseup',(e)=>{
+canvas[2].addEventListener(eventEnd,(e)=>{
   scrol_on = false;
+  if(scrol[1] > 0){
+    scrol[1] = 0;
+  }else if(last_log.length < 7 && scrol[1] <= 0){
+    scrol[1] = 0;
+  }else if(last_log.length >= 7 && -scrol[1] > last_log.length * 150 - 900){
+    scrol[1] = last_log.length*(-150) + 900;
+  }
 })
 
 //画面の描写全部
@@ -221,6 +276,7 @@ function step() {
   } else if (seen == 0) {
     //ステータス
     c.drawImage(images[1], 0, 0);
+    c.drawImage(buttons[0], 0, 1230);
   } else if (seen == 1) {
     //行先選択
     c.drawImage(images[2], 0, 0);
@@ -231,6 +287,8 @@ function step() {
     if(stage_select){
       c.drawImage(buttons[1],540,950);
     }
+    c.drawImage(images[3],0,0);
+    c.drawImage(buttons[0], 0, 1230);
   } else if (seen == 2) {
     //進行中
     c.drawImage(images[2], 0, 0);
@@ -243,14 +301,15 @@ function step() {
         let addY = 40 *j;
         c.fillText(line, 180, 370 + n + addY + scrol[1]);
       }
-//      c.fillText(last_log[i][0], 180, 380+n);
-//      c.fillText("「ええかんじや！」", 180, 420+n);
       c.drawImage(icons[last_log[i][2]], 30, 300 + n + scrol[1]);
     }
+    c.drawImage(images[3],0,0);
+    c.drawImage(buttons[0], 0, 1230);
+    c.drawImage(images[4], 100 + last_log.length * 23, 170);
   } else if (seen == 3) {
     //アドバイス
-  }
   c.drawImage(buttons[0], 0, 1230);
+  }
   ctx.drawImage(m_canvas, 0, 0);
   canvas[1 - flip].style.visibility = "hidden";
   canvas[flip].style.visibility = "visible";
