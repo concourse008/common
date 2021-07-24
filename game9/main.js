@@ -93,9 +93,9 @@ let time = 0;
 let life = 3;
 function plus_log() {//ログ
   let new_log = 0;
-  let eve = Math.floor(Math.random()*3+1);
+  let eve = Math.floor(Math.random()*3+2);
   //ログ追加
-  if(eve == 1){
+  if(eve == 4){
     new_log = e1;
   }else{
     new_log = n1;
@@ -119,7 +119,7 @@ function plus_log() {//ログ
     stage_start = false;
     life = 3;
   }
-  if(time == 51){
+  if(time >= 51){
     last_log.unshift(["目的地に到着！！\n「やったー！」",time,1]);
     clearInterval(gogo);
     stage_start = false;
@@ -305,7 +305,7 @@ function step() {
     }
     c.drawImage(images[3],0,0);
     c.drawImage(buttons[0], 0, 1230);
-    c.drawImage(images[4], 100 + last_log.length * 23, 170);
+    c.drawImage(images[4], 100 + time * 11, 170);
   } else if (seen == 3) {
     //アドバイス
   c.drawImage(buttons[0], 0, 1230);
