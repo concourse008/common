@@ -57,32 +57,13 @@ for (let i in stage) {
   stages[i].src = stage[i][0];
 }
 
-//イベントクラス
-class Log {
-  constructor(log) {
-    this.log = log;
-  }
-}
-class Event extends Log {
-  constructor(log, elog, check) {
-    super(log);
-    this.elog = elog;
-    this.check = check;
-  }
-}
-class Way {
-  constructor(name, far, step, dif) {
-    this.name = name;
-    this.far = far;
-    this.step = step;
-    this.dif = dif;
-  }
-}
+
 
 //変数宣言
 let seen = -1; //-1タイトル画面。0ステータス画面。1行先選択。2進行中。3アドバイス
 let ad_seen = 0; //０通常。１アドバイス後。２相談
-let stats = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+let stats = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+let stats_cap = [0,1,4,7,11,17,23,32,46,67];
 let stats_name = [
   "勇気",
   "優しさ",
@@ -122,9 +103,9 @@ function plus_log() {
   let eve = Math.floor(Math.random() * 3 + 2);
   //ログ追加
   if (eve == 4) {
-    new_log = e1;
+    new_log = event1[Math.floor(Math.random() * event1.length)];
   } else {
-    new_log = n1;
+    new_log = nomal_log[Math.floor(Math.random() * nomal_log.length)];
   } //イベントかログか判定
   if (new_log.elog) {
     //イベントの場合
@@ -184,6 +165,9 @@ function post(e) {
     console.log(advice_arr);
     if(e == 0){
       ad_seen = 1;
+      stats[advice_arr[0]] = stats[advice_arr[0]] + advice_arr[1];
+      stats[advice_arr[2]] = stats[advice_arr[2]] + advice_arr[3];
+      stats[advice_arr[4]] = stats[advice_arr[4]] + advice_arr[5];
     }else if(e == 1){
       ad_seen = 2;
     }
@@ -348,16 +332,24 @@ function step() {
     //ステータス
     c.drawImage(images[1], 0, 0);
     for (let i in stats) {
+      let lv = 0;
+      let exp = 0;
       c.fillText(
         stats_name[i],
-        180 + (i % 2) * 350,
+        40 + (i % 2) * 350,
         570 - (((i % 2) - i) / 2) * 140
       );
-      c.fillText(
-        "レベル：" + stats[i],
-        180 + (i % 2) * 350,
-        600 - (((i % 2) - i) / 2) * 140
-      );
+      for(let j in stats){
+        if(stats[i] < stats_cap[j]){
+          exp = stats[i] - stats_cap[j-1];
+          c.fillText(
+            "レベル：" + j + " (" + exp + "/" + stats_cap[j] + ")",
+            40 + (i % 2) * 350,
+            610 - (((i % 2) - i) / 2) * 140
+          );
+          break;
+        }
+      }
     }
     c.drawImage(buttons[0], 0, 1230);
   } else if (seen == 1) {
